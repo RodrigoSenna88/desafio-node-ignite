@@ -33,15 +33,14 @@ app.post('/users',  (request, response) => {
     return response.status(400).json({ error: "User already exists!"})
   }
 
+  const user = { id: uuidv4(), name, username, todos: [] };
+  
+  
+  users.push(user);
 
-  users.push({
-    id: uuidv4(),
-    name,
-    username, 
-    todos: []
-  })
+  console.log(user);
 
-  return response.status(201).send();
+  return response.status(201).json(user);
 
 });
 
