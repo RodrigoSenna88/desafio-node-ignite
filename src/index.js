@@ -25,7 +25,9 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 app.post('/users',  (request, response) => {
-  const { name, username } = request.body;
+
+  const { name, username} = request.body;
+
 
   const checkUser = users.some(user => user.username === username);
 
@@ -33,12 +35,19 @@ app.post('/users',  (request, response) => {
     return response.status(400).json({ error: "User already exists!"})
   }
 
-  const user = { id: uuidv4(), name, username, todos: [] };
+  // const user = { id: uuidv4(), name, username, todos: [] };
   
   
-  users.push(user);
+  users.push({
+    id: uuidv4(),
+    name,
+    username,
+    todos: [],
+  });
 
   console.log(user);
+  console.log(name);
+  console.log(username);
 
   return response.status(201).json(user);
 
