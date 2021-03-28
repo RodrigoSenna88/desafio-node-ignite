@@ -58,21 +58,23 @@ app.get('/todos', (request, response) => {
 });
 
 app.post('/todos', (request, response) => {
-const { title, deadLine } = request.body;
+const { title, deadline } = request.body;
+
+console.log(request.body);
 
 const { user } = request;
+
 
 const newTodos = {
   id: uuidv4(),
   title,
   done: false,
-  deadline: new Date(deadLine),
+  deadline:  new Date(deadline),
   created_at: new Date,
 }
-
  user.todos.push(newTodos);
 
- return response.status(201).send(user.todos);
+ return response.status(201).send(newTodos);
 
 });
 
