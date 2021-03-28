@@ -50,7 +50,7 @@ app.post('/users',  (request, response) => {
 
 app.use(checksExistsUserAccount);
 
-app.get('/todos',  (request, response) => {
+app.get('/todos', (request, response) => {
   const { user } = request;  
   return response.status(200).json(user.todos);
 
@@ -58,22 +58,22 @@ app.get('/todos',  (request, response) => {
 });
 
 app.post('/todos', (request, response) => {
-  const { title, deadline } = request.body;
+const { title, deadLine } = request.body;
 
-  const { user } = request;
+const { user } = request;
 
-  const newTodo = {
-    id: uuidv4(),
-    title,
-    done: false,
-    deadline: Date(deadline),
-    created_at: new Date()
+const newTodos = {
+  id: uuidv4(),
+  title,
+  done: false,
+  deadline: new Date(deadLine),
+  created_at: new Date,
+}
 
-  }
+ user.todos.push(newTodos);
 
-  user.todos.push(newTodo);
+ return response.status(201).send(user.todos);
 
-  return response.status(201).json(user);
 });
 
 app.put('/todos/:id', (request, response) => {
