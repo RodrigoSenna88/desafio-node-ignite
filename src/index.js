@@ -52,9 +52,9 @@ app.use(checksExistsUserAccount);
 
 app.get('/todos', (request, response) => {
   const { user } = request;  
+
   return response.status(200).json(user.todos);
 
-  
 });
 
 app.post('/todos', (request, response) => {
@@ -79,22 +79,34 @@ const newTodos = {
 });
 
 app.put('/todos/:id', (request, response) => {
-  const { username } = request.headers;
+  const  { user }  = request;
+  const { id } = request.params;
   const { title, deadline} = request.body;
 
+  const todoIndex = user.todos.findIndex(todo => todo.id === id);
+  console.log(user)
 
-  const user = users.find(user => user.username === username);
+  if( todoIndex < 0) {
+    return response.status(400).json({ error: 'Todo not found'})
 
-  
-  if(!user) {
-    return response.status(400).json({ error: "User not found."})
   }
 
-  user.title = title;
-  user.deadline = deadline;
+const todo = {
+  id,
+  title,
+  deadline,
+  done: false,
 
-  return response.status(200).send();
+}
+  user.todos[todoIndex] = todo;
 
+  console.log(user)
+  console.log(todoIndex)
+  console.log(todo)
+
+ return response.status(200).send(todo);
+
+  
 });
 
 app.patch('/todos/:id/done', (request, response) => {
