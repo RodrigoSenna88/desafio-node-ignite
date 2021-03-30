@@ -137,11 +137,12 @@ describe('Todos', () => {
     const response = await request(app)
       .patch(`/todos/${todoResponse.body.id}/done`)
       .set('username', userResponse.body.username);
-
+ 
     expect(response.body).toMatchObject({
       ...todoResponse.body,
       done: true
     });
+   
   });
 
   it('should not be able to mark a non existing todo as done', async () => {

@@ -102,7 +102,7 @@ app.put('/todos/:id', (request, response) => {
 app.patch('/todos/:id/done', (request, response) => {
 const { user } = request;
 const { id } = request.params;
-const { done } = request.body;
+const done = request.headers.done;
 
 const todoIndex = user.todos.findIndex(todo => todo.id === id);
 
@@ -113,9 +113,8 @@ if( todoIndex < 0) {
 
 const todo = user.todos[todoIndex];
 
-
 todo.done = done;
-
+console.log(todo)
 return response.status(200).send(todo);
 
 });
