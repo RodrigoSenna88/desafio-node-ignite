@@ -42,8 +42,6 @@ app.post('/users',  (request, response) => {
   
   users.push(user);
 
-  
-
   return response.status(201).json(user);
 
 });
@@ -60,10 +58,7 @@ app.get('/todos', (request, response) => {
 app.post('/todos', (request, response) => {
 const { title, deadline } = request.body;
 
-console.log(request.body);
-
 const { user } = request;
-
 
 const newTodos = {
   id: uuidv4(),
@@ -87,22 +82,17 @@ app.put('/todos/:id', (request, response) => {
   console.log(user)
 
   if( todoIndex < 0) {
-    return response.status(400).json({ error: 'Todo not found'})
+    
+    return response.status(404).json({ error: 'Todo not found'})
 
   }
 
-const todo = {
-  id,
-  title,
-  deadline,
-  done: false,
+  const todo = user.todos[todoIndex];
 
-}
-  user.todos[todoIndex] = todo;
+  todo.title = title;
+  todo.deadline = deadline;
 
-  console.log(user)
-  console.log(todoIndex)
-  console.log(todo)
+  
 
  return response.status(200).send(todo);
 
@@ -110,17 +100,41 @@ const todo = {
 });
 
 app.patch('/todos/:id/done', (request, response) => {
-  // Complete aqui
+const { user } = request;
+const { id } = request.params;
+const { done } = request.body;
+
+const todoIndex = user.todos.findIndex(todo => todo.id === id);
+
+if( todoIndex < 0) {
+  return response.status(404).json({ error: 'Todo not found'})
+
+}
+
+const todo = user.todos[todoIndex];
+
+
+todo.done = done;
+
+return response.status(200).send(todo);
+
 });
 
 app.delete('/todos/:id', (request, response) => {
   const { user } = request;
+  const { id } = request.params;
 
-  const userIndex = users.indexOf(user);
+  const todoIndex = user.todos.findIndex(todo => todo.id === id);
 
-  users.splice(userIndex, 1);
+  if( todoIndex < 0) {
+  return response.status(404).json({ error: 'Todo not found'})
 
-  return response.status(200).json(users);
+}
+
+
+  user.todos.splice(todoIndex, 1);
+
+  return response.status(204).json(user.todos);
 
 });
 
