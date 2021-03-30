@@ -113,9 +113,11 @@ if( todoIndex < 0) {
 
 const todo = user.todos[todoIndex];
 
-todo.done = done;
+const transformDoneFieldInBoolean = (done === 'true')
+
+todo.done = transformDoneFieldInBoolean;
 console.log(todo)
-return response.status(200).send(todo);
+return response.status(200).send(todo, transformDoneFieldInBoolean);
 
 });
 
